@@ -8,8 +8,10 @@ controls it enforces, with every number traced to a line of code.
 ## Install
 
 ```bash
-git clone https://github.com/nmbrthirteen/website-security-report.git ~/.claude/skills/website-security-report
+npx skills add nmbrthirteen/website-security-report
 ```
+
+Or clone it into `~/.claude/skills/website-security-report`.
 
 Then ask for a security overview, or run `/website-security-report`. Needs
 Node 18+ and Chrome.
