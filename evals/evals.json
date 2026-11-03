@@ -1,0 +1,38 @@
+[
+  {
+    "skills": ["website-security-report"],
+    "query": "Make a security overview PDF of our site for the security team.",
+    "files": ["A web app repo with an app-level WAF, rate limits, IP auto-blocking, 2FA and CI"],
+    "expected_behavior": [
+      "Every printed number has an evidence row whose path:line points at the code that enforces it, and check-evidence.mjs ends at 0 problems",
+      "Rate limits, block thresholds and windows match the code exactly, without rounding",
+      "Firewall rules are named in words, with no payloads, regexes or URLs in the PDF",
+      "The PDF holds only the title, headings, tables, rows and Known limits, with no summary or footnotes",
+      "No section is split across pages and every page image was checked after the last render"
+    ]
+  },
+  {
+    "skills": ["website-security-report"],
+    "query": "Our pentest starts next week. Put together what protections we have so the testers know our limits.",
+    "files": ["A monorepo product with no WAF, auth library defaults, Docker isolation and no public domain"],
+    "expected_behavior": [
+      "Triggers the skill even though the user never says PDF or report",
+      "Titles the report with the product name when the repo has no domain",
+      "Drops firewall, IP block and probe sections instead of padding them",
+      "Counts library defaults only where the app uses them, citing the app call site",
+      "Lists missing two-factor, missing dependency audit or similar absences under Known limits with Not found evidence"
+    ]
+  },
+  {
+    "skills": ["website-security-report"],
+    "query": "What security headers and rate limits do we have? Need a doc for the security team.",
+    "files": ["A static site served by nginx with limit_req, headers set in nginx.conf, and a Cloudflare proxy configured only in the dashboard"],
+    "expected_behavior": [
+      "Reads limits and headers from nginx.conf rather than app code",
+      "States that Cloudflare dashboard rules cannot be proved from the repo, leaves them out of the PDF and tells the user",
+      "Adds a Known limit when protection depends on dashboard settings",
+      "Prints header effects in words, with header names in plain text",
+      "Keeps internal hostnames and server paths out of the PDF"
+    ]
+  }
+]

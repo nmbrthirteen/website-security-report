@@ -1,0 +1,133 @@
+{
+  "title": "example.com security overview",
+  "theme": { "ink": "#14161a" },
+  "sections": [
+    {
+      "kind": "flow",
+      "title": "Request flow",
+      "columns": [
+        ["Visitor"],
+        ["Cloudflare", "Load balancer"],
+        [{ "label": "Edge middleware", "tone": "guard" }, { "label": "API rate limiter", "tone": "guard" }],
+        ["PostgreSQL 16", "Redis 7"]
+      ]
+    },
+    {
+      "kind": "facts",
+      "title": "Stack",
+      "items": [
+        { "label": "Hosting", "value": "AWS, eu-west-1" },
+        { "label": "Node.js", "value": "22.11" },
+        { "label": "Next.js", "value": "15.3.2" },
+        { "label": "React", "value": "19.1.0" },
+        { "label": "Auth.js", "value": "5.0.0" },
+        { "label": "Prisma", "value": "6.8.2" },
+        { "label": "PostgreSQL", "value": "16, TLS" },
+        { "label": "Redis", "value": "7.2" },
+        { "label": "pnpm", "value": "9.15.0" },
+        { "label": "TypeScript", "value": "5.8.3" }
+      ]
+    },
+    {
+      "kind": "table",
+      "title": "Firewall rules",
+      "columns": ["Rule", "Catches"],
+      "rows": [
+        ["SQL injection", "Union selects, always-true conditions, time delays, stacked statements"],
+        ["Cross-site scripting", "Script tags, script links, inline event handlers, embedded frames"],
+        ["Path traversal", "Parent directory walks, system file reads"],
+        ["Command injection", "Chained shell commands, Log4Shell lookups, template injection"],
+        ["Request forgery (SSRF)", "Cloud metadata address, local file links"]
+      ]
+    },
+    {
+      "kind": "table",
+      "title": "Rate limits",
+      "columns": ["Traffic", "Limit", "Over limit"],
+      "rows": [
+        ["Pages", "1,200 / min", "429"],
+        ["API", "300 / min", "429"],
+        ["Sign-in", "10 / 15 min", "**Blocked**"],
+        ["Password reset", "3 / hour", "429"],
+        ["Contact form", "5 / 10 min", "Rejected"]
+      ]
+    },
+    {
+      "kind": "table",
+      "title": "Automatic IP blocks",
+      "columns": ["Trigger", "Threshold", "Window"],
+      "rows": [
+        ["Failed sign-ins", "10", "15 min"],
+        ["Password spraying", "5 accounts", "15 min"],
+        ["Attack payloads", "3", "1 hour"],
+        ["Probing unknown paths", "50", "5 min"]
+      ]
+    },
+    { "kind": "steps", "title": "Block length", "steps": ["15 min", "1 h", "4 h", "24 h", "7 d"] },
+    {
+      "kind": "facts",
+      "title": "API limits",
+      "items": [
+        { "label": "Request body", "value": "1 MB" },
+        { "label": "File upload", "value": "20 MB, signed in" },
+        { "label": "GraphQL depth", "value": "6" },
+        { "label": "Introspection", "value": "Off in production" },
+        { "label": "CORS", "value": "Own origin" },
+        { "label": "CSRF", "value": "Double-submit token" }
+      ]
+    },
+    {
+      "kind": "facts",
+      "title": "Sign-in and admin access",
+      "items": [
+        { "label": "Two-factor", "value": "Required for admins" },
+        { "label": "Passkeys", "value": "Supported" },
+        { "label": "Session", "value": "12 hours" },
+        { "label": "Cookies", "value": "HttpOnly, Secure, Lax" },
+        { "label": "Account lock", "value": "10 failures, 30 min" },
+        { "label": "Admin panel", "value": "Office IPs only" }
+      ]
+    },
+    {
+      "kind": "table",
+      "title": "Security headers",
+      "columns": ["Header", "Value"],
+      "rows": [
+        ["Strict-Transport-Security", "2 years, subdomains included, preload"],
+        ["Content-Security-Policy", "Nonce per request, no plugins, same-origin framing"],
+        ["X-Content-Type-Options", "`nosniff`"],
+        ["Referrer-Policy", "Origin only on cross-site requests"],
+        ["Permissions-Policy", "Camera, microphone and location off"]
+      ]
+    },
+    {
+      "kind": "facts",
+      "title": "Logging and alerts",
+      "items": [
+        { "label": "Security log", "value": "Blocks, sign-ins, admin changes" },
+        { "label": "Retention", "value": "180 days" },
+        { "label": "Alerts", "value": "Slack and PagerDuty" },
+        { "label": "Error tracking", "value": "Sentry" }
+      ]
+    },
+    {
+      "kind": "facts",
+      "title": "Build and deploy",
+      "items": [
+        { "label": "Every change", "value": "Tests, lint, types, build" },
+        { "label": "Dependency audit", "value": "High severity fails" },
+        { "label": "Secret scanning", "value": "Gitleaks on every push" },
+        { "label": "Deploy", "value": "After checks pass" }
+      ]
+    },
+    {
+      "kind": "list",
+      "title": "Known limits",
+      "items": [
+        "Page rate limits run in edge memory per region. Traffic spread across regions counts separately.",
+        "The firewall rules skip multipart uploads.",
+        "Admin IP allow list is set in the Cloudflare dashboard and is not in the repo."
+      ]
+    }
+  ]
+}
